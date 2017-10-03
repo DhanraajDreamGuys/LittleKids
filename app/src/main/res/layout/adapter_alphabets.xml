@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <co.in.dreamguys.littlekids.Custom.SF_CartoonTextView
+        android:id="@+id/tv_alphabet"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:background="@drawable/ic_letterbg"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_36sdp" />
+
+    <TextView
+        android:id="@+id/tv_txtname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="APPLE"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_18sdp" />
+
+    <ImageView
+        android:id="@+id/AAimage"
+        android:layout_width="@dimen/_180sdp"
+        android:layout_height="@dimen/_180sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:adjustViewBounds="true"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY" />
+
+    <Button
+        android:id="@+id/bt_playsound"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/playsound" />
+
+
+</LinearLayout>

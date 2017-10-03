@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
+    android:orientation="vertical">
+
+    <co.in.dreamguys.littlekids.Custom.SF_CartoonTextView
+        android:id="@+id/AL_TV_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="English"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_14sdp" />
+
+
+</LinearLayout>
