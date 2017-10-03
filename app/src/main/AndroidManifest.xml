@@ -19,7 +19,7 @@
 
         </activity>
         <activity
-            android:name=".LanguageActivity"
+            android:name=".ChooseLanguage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashScreen"
@@ -30,8 +30,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Category_Activity"
+            android:name=".ChooseCategory"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ShowCategoryItems"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".test.TestActivity">
 
         </activity>

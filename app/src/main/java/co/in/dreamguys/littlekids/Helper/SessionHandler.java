@@ -33,5 +33,8 @@ public class SessionHandler {
         return mContext.getSharedPreferences(Config.APP_NAME, Context.MODE_PRIVATE).getString(key, null);
     }
 
+    public String getLastUTime(Context mContext, String key) {
+        return mContext.getSharedPreferences(Config.APP_NAME, Context.MODE_PRIVATE).getString(key, "0");
+    }
 
 }

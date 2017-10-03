@@ -1,13 +1,18 @@
 package co.in.dreamguys.littlekids.Util;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+import co.in.dreamguys.littlekids.R;
 
 /**
  * Created by user5 on 12-09-2017.
@@ -51,4 +56,18 @@ public class Utility {
     }
 
 
+    public static void showAlertDialog(final Context mContext, String message, String title) {
+        AlertDialog.Builder createBuilder = new AlertDialog.Builder(mContext);
+        createBuilder.setCancelable(true).setTitle(title).setMessage(message).setPositiveButton(mContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        createBuilder.show();
+    }
+
+    public static MediaPlayer createMediaplayerAudio(Context mContext) {
+        return MediaPlayer.create(mContext, R.raw.switchs);
+    }
 }

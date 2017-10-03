@@ -13,6 +13,9 @@ public class LanguageResponse {
     @SerializedName("Response")
     @Expose
     private Response response;
+    @SerializedName("last_updated_time")
+    @Expose
+    private String last_updated_time;
     @SerializedName("LanguageInfo")
     @Expose
     private List<LanguageInfo> languageInfo = null;
@@ -23,6 +26,14 @@ public class LanguageResponse {
 
     public void setResponse(Response response) {
         this.response = response;
+    }
+
+    public String getLast_updated_time() {
+        return last_updated_time;
+    }
+
+    public void setLast_updated_time(String last_updated_time) {
+        this.last_updated_time = last_updated_time;
     }
 
     public List<LanguageInfo> getLanguageInfo() {
@@ -62,15 +73,14 @@ public class LanguageResponse {
 
     public class Response {
 
+        // 0  - No Data, 1 - New Data, 2 - No Updates - Response code.
+
         @SerializedName("response_code")
         @Expose
         private String response_code;
         @SerializedName("response_message")
         @Expose
         private String response_message;
-        @SerializedName("last_updated")
-        @Expose
-        private String last_updated;
 
         public String getResponse_code() {
             return response_code;
@@ -86,14 +96,6 @@ public class LanguageResponse {
 
         public void setResponse_message(String response_message) {
             this.response_message = response_message;
-        }
-
-        public String getLast_updated() {
-            return last_updated;
-        }
-
-        public void setLast_updated(String last_updated) {
-            this.last_updated = last_updated;
         }
 
     }

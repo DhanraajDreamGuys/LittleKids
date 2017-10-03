@@ -1,21 +1,13 @@
 package co.in.dreamguys.littlekids.Network;
 
-import com.squareup.okhttp.OkHttpClient;
-
-import java.util.concurrent.TimeUnit;
-
-import co.in.dreamguys.littlekids.Helper.Config;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
-
 /**
  * Created by tech on 8/13/2015.
  */
 public class ApiCallBaseConfiguration {
-    private static ApiCallBaseConfiguration ourInstance;
+   /* private static ApiCallBaseConfiguration ourInstance;
     RestAdapter ApiBuilder;
 
-    /*BASE URL place it here  -  live url*/
+    *//*BASE URL place it here  -  live url*//*
 
     public static ApiCallBaseConfiguration getInstance() {
         if (ourInstance == null) {
@@ -49,5 +41,5 @@ public class ApiCallBaseConfiguration {
 
     public void setApiBuilder(RestAdapter apiBuilder) {
         ApiBuilder = apiBuilder;
-    }
+    }*/
 }
