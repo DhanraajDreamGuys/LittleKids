@@ -12,7 +12,7 @@ import co.in.dreamguys.littlekids.Helper.Config;
 import co.in.dreamguys.littlekids.R;
 import co.in.dreamguys.littlekids.RealmModel.Category;
 import co.in.dreamguys.littlekids.ShowCategoryItems;
-import io.realm.RealmResults;
+import io.realm.RealmList;
 
 /**
  * Created by user5 on 11-09-2017.
@@ -21,12 +21,12 @@ import io.realm.RealmResults;
 public class CategoryAdapter extends BaseAdapter {
 
     private Context mContext;
-    private RealmResults<Category> mCategoryList;
+    private RealmList<Category> mCategoryList;
 
     public CategoryAdapter() {
     }
 
-    public void setData(RealmResults<Category> mCategoryList) {
+    public void setData(RealmList<Category> mCategoryList) {
         this.mCategoryList = mCategoryList;
         notifyDataSetChanged();
     }

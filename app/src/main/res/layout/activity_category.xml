@@ -10,7 +10,7 @@
     <ListView
         android:id="@+id/CC_LV_category"
         android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_height="@dimen/_240sdp"
         android:layout_margin="@dimen/_70sdp"
         android:divider="@null"
         android:scrollbars="none"

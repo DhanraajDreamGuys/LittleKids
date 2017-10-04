@@ -53,7 +53,6 @@ public class SplashScreen extends AppCompatActivity {
         mHandler = new Handler();
 
 
-
         long max = realm.where(LanguageInfo.class).count();
         final LanguageInfo languages = realm.where(LanguageInfo.class).equalTo("lang_id", String.valueOf(max)).findFirst();
 
@@ -63,7 +62,7 @@ public class SplashScreen extends AppCompatActivity {
                 if (!Utility.isNetworkAvailable(SplashScreen.this)) {
                     final RealmResults<LanguageInfo> mLangArray = realm.where(LanguageInfo.class).findAll();
                     if (mLangArray.size() == 0) {
-                        Utility.showAlertDialog(SplashScreen.this, getString(R.string.no_internet_connection), getString(R.string.alert_warn));
+                        Utility.showAlertDialog(SplashScreen.this, getString(R.string.no_internet_connection));
                     } else {
                         showLanguageActivity();
                     }
@@ -88,7 +87,7 @@ public class SplashScreen extends AppCompatActivity {
                         Log.d(TAG, "In onCompleted()");
                         RealmResults<LanguageInfo> languageInfos = realm.where(LanguageInfo.class).findAll();
                         if (languageInfos.size() == 0) {
-                            Utility.showAlertDialog(SplashScreen.this, getString(R.string.no_data_found), getString(R.string.alert_warning));
+                            Utility.showAlertDialog(SplashScreen.this, getString(R.string.no_data_found));
                         } else {
                             showLanguageActivity();
                         }

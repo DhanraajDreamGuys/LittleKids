@@ -9,14 +9,18 @@ import android.transition.Slide;
 import android.util.Log;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.in.dreamguys.littlekids.Adapter.CategoryAdapter;
 import co.in.dreamguys.littlekids.Helper.Config;
 import co.in.dreamguys.littlekids.Model.CategoryResponse;
 import co.in.dreamguys.littlekids.Network.GitHubClient;
+import co.in.dreamguys.littlekids.RealmModel.Categories;
 import co.in.dreamguys.littlekids.RealmModel.Category;
 import co.in.dreamguys.littlekids.Util.Utility;
 import io.realm.Realm;
-import io.realm.RealmResults;
+import io.realm.RealmList;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -33,7 +37,9 @@ public class ChooseCategory extends LittleKidsActivity {
     private static final String TAG = ChooseCategory.class.getSimpleName();
     CategoryAdapter aCategoryAdapter;
     ListView categoryWidgets;
-
+    List<Category> insertCategory = new ArrayList<Category>();
+    Category POJOCategory;
+    Categories fetchCatdata;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -46,20 +52,23 @@ public class ChooseCategory extends LittleKidsActivity {
 
         loadUI();
 
-        RealmResults<Category> mCategoryResponse = realm.where(Category.class).findAll();
-        long max = realm.where(Category.class).count();
-        Category value = realm.where(Category.class).equalTo("category_id", String.valueOf(max)).findFirst();
+        fetchCatdata = realm.where(Categories.class).equalTo("id", langid).findFirst();
 
-        if (!Utility.isNetworkAvailable(ChooseCategory.this)) {
-            if (mCategoryResponse.size() > 0) {
-                showCategoryListData(mCategoryResponse);
+        if (fetchCatdata != null) {
+            if (fetchCatdata.getCategory().size() > 0 && !Utility.isNetworkAvailable(ChooseCategory.this)) {
+                showCategoryListData(fetchCatdata.getCategory());
+            } else if (Utility.isNetworkAvailable(ChooseCategory.this)) {
+                getCategory(langid, fetchCatdata.getLastupdatetime());
+            } else {
+                Utility.PassAlertPAct(ChooseCategory.this, getString(R.string.no_data_found));
             }
-        } else if (value != null) {
-            getCategory(langid, value.getLast_updated_time());
+        } else if (Utility.isNetworkAvailable(ChooseCategory.this)) {
+            getCategory(langid, Config.Lang_Last_Updated_time);
         } else {
-            getCategory(langid, "0");
+            Utility.PassAlertPAct(ChooseCategory.this, getString(R.string.no_data_found));
         }
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setupWindowAnimations() {
@@ -80,7 +89,7 @@ public class ChooseCategory extends LittleKidsActivity {
         categoryWidgets = (ListView) findViewById(R.id.CC_LV_category);
     }
 
-    private void showCategoryListData(RealmResults<Category> mCategoryResponse) {
+    private void showCategoryListData(RealmList<Category> mCategoryResponse) {
         aCategoryAdapter = new CategoryAdapter();
         aCategoryAdapter.setClassInstance(ChooseCategory.this);
         aCategoryAdapter.setData(mCategoryResponse);
@@ -88,7 +97,7 @@ public class ChooseCategory extends LittleKidsActivity {
     }
 
 
-    private void getCategory(String langid, String last_update_time) {
+    private void getCategory(final String langid, String last_update_time) {
         Subscription subscription = GitHubClient.getInstance()
                 .getCategoryData(langid, last_update_time)
                 .subscribeOn(Schedulers.io())
@@ -97,12 +106,20 @@ public class ChooseCategory extends LittleKidsActivity {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "In onCompleted()");
-                        RealmResults<Category> mCategoryResponse = realm.where(Category.class).findAll();
-                        if (mCategoryResponse.size() == 0) {
-                            Utility.showAlertDialog(ChooseCategory.this, getString(R.string.no_data_found), getString(R.string.alert_warning));
+                        fetchCatdata = realm.where(Categories.class).equalTo("id", langid).findFirst();
+                        if (fetchCatdata != null) {
+                            if (fetchCatdata.getCategory().size() > 0) {
+                                showCategoryListData(fetchCatdata.getCategory());
+                            } else {
+                                Utility.PassAlertPAct(ChooseCategory.this, getString(R.string.no_data_found));
+                            }
                         } else {
-                            showCategoryListData(mCategoryResponse);
+                            Utility.PassAlertPAct(ChooseCategory.this, getString(R.string.no_data_found));
                         }
+                        // Log.i(TAG, "lang_id: " +
+                        // fetchCatdata.getId() + "last_update_time: " +
+                        // fetchCatdata.getLastupdatetime() + "category_size: " +
+                        // fetchCatdata.getCategory().size());
                     }
 
                     @Override
@@ -113,27 +130,93 @@ public class ChooseCategory extends LittleKidsActivity {
 
                     @Override
                     public void onNext(CategoryResponse categoryResponse) {
-                        if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("1")) {
-                            realm.beginTransaction();
-                            for (int i = 0; i < categoryResponse.getCategories().size(); i++) {
-                                Category updateCategory = realm.where(Category.class).equalTo("category_id", categoryResponse.getCategories().get(i).getCategory_id()).findFirst();
-                                if (updateCategory != null) {
-                                    updateCategory.setCategory_id(categoryResponse.getCategories().get(i).getCategory_id());
-                                    updateCategory.setCategory_name(categoryResponse.getCategories().get(i).getCategory_name());
-                                    updateCategory.setLast_updated_time(categoryResponse.getLast_updated_time());
-                                } else {
-                                    Category addCategories = realm.createObject(Category.class);
-                                    addCategories.setCategory_id(categoryResponse.getCategories().get(i).getCategory_id());
-                                    addCategories.setCategory_name(categoryResponse.getCategories().get(i).getCategory_name());
-                                    addCategories.setLast_updated_time(categoryResponse.getLast_updated_time());
-                                }
-                            }
-                            realm.commitTransaction();
-                        } else {
-                            Log.i(TAG, categoryResponse.getResponse().getResponse_message());
-                        }
+//                        oldTricks(categoryResponse);
+                        newTricks(categoryResponse);
                     }
 
                 });
+    }
+
+    private void newTricks(final CategoryResponse categoryResponse) {
+        if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("0")) {
+            Log.i(TAG, categoryResponse.getResponse().getResponse_message());
+        } else if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("2")) {
+            Log.i(TAG, categoryResponse.getResponse().getResponse_message());
+        } else if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("1")) {
+            final Categories updateCat = realm.where(Categories.class).equalTo("lastupdatetime", categoryResponse.getLast_updated_time()).findFirst();
+            if (updateCat != null) {
+                updateCatgorydata(updateCat, categoryResponse);
+            } else {
+                createCategorydata(categoryResponse);
+            }
+        }
+    }
+
+    private void updateCatgorydata(final Categories updateCat, final CategoryResponse categoryResponse) {
+        // Update category in a transaction
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("1")) {
+                    updateCat.setId(categoryResponse.getLang());
+                    updateCat.setLastupdatetime(categoryResponse.getLast_updated_time().trim());
+                    for (int i = 0; i < categoryResponse.getCategories().size(); i++) {
+                        CategoryResponse.Category category = categoryResponse.getCategories().get(i);
+                        updateCat.getCategory().get(i).setCategory_id(category.getCategory_id());
+                        updateCat.getCategory().get(i).setCategory_name(category.getCategory_name());
+                        updateCat.getCategory().add(updateCat.getCategory().get(i));
+                    }
+                } else {
+                    Log.i(TAG, categoryResponse.getResponse().getResponse_message());
+                }
+            }
+        });
+
+    }
+
+    private void createCategorydata(final CategoryResponse categoryResponse) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                // Insert New categories items here...
+                if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("1")) {
+                    Categories addCategories = realm.createObject(Categories.class);
+                    addCategories.setId(categoryResponse.getLang());
+                    addCategories.setLastupdatetime(categoryResponse.getLast_updated_time().trim());
+                    for (CategoryResponse.Category category : categoryResponse.getCategories()) {
+                        Category category1 = realm.createObject(Category.class);
+                        category1.setCategory_id(category.getCategory_id());
+                        category1.setCategory_name(category.getCategory_name());
+                        addCategories.getCategory().add(category1);
+                    }
+                } else {
+                    Log.i(TAG, categoryResponse.getResponse().getResponse_message());
+                }
+            }
+        });
+
+    }
+
+    private void oldTricks(CategoryResponse categoryResponse) {
+        if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("1")) {
+            realm.beginTransaction();
+            for (int i = 0; i < categoryResponse.getCategories().size(); i++) {
+                Category updateCategory = realm.where(Category.class).equalTo("category_id", categoryResponse.getCategories().get(i).getCategory_id()).findFirst();
+                if (updateCategory != null) {
+                    updateCategory.setCategory_id(categoryResponse.getCategories().get(i).getCategory_id());
+                    updateCategory.setCategory_name(categoryResponse.getCategories().get(i).getCategory_name());
+                    updateCategory.setLast_updated_time(categoryResponse.getLast_updated_time());
+                } else {
+                    Category addCategories = realm.createObject(Category.class);
+                    addCategories.setCategory_id(categoryResponse.getCategories().get(i).getCategory_id());
+                    addCategories.setCategory_name(categoryResponse.getCategories().get(i).getCategory_name());
+                    addCategories.setLast_updated_time(categoryResponse.getLast_updated_time());
+                }
+            }
+            realm.commitTransaction();
+        } else {
+            Log.i(TAG, categoryResponse.getResponse().getResponse_message());
+        }
     }
 }

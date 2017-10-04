@@ -4,12 +4,12 @@ import io.realm.RealmObject;
 
 public class Category extends RealmObject {
 
-
+    private String lang_id;
     private String category_id;
     private String category_name;
 
-    @DefaultValue(0)
-    private String last_updated_time;
+
+    private String last_updated_time = "0";
 
     public String getCategory_id() {
         return category_id;
@@ -33,6 +33,14 @@ public class Category extends RealmObject {
 
     public void setLast_updated_time(String last_updated_time) {
         this.last_updated_time = last_updated_time;
+    }
+
+    public String getLang_id() {
+        return lang_id;
+    }
+
+    public void setLang_id(String lang_id) {
+        this.lang_id = lang_id;
     }
 
     public @interface DefaultValue {

@@ -2,24 +2,23 @@ package co.in.dreamguys.littlekids.RealmModel;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Prasad on 10/3/2017.
  */
 
 public class Categories extends RealmObject {
-    @PrimaryKey
-    long id;
-    RealmList <Category> category;
-    String lastupdatetime;
+
+    private String id;
+    private RealmList<Category> category;
+    private String lastupdatetime;
 
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

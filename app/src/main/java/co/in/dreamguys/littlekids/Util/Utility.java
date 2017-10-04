@@ -12,6 +12,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import co.in.dreamguys.littlekids.ChooseCategory;
 import co.in.dreamguys.littlekids.R;
 
 /**
@@ -56,11 +57,23 @@ public class Utility {
     }
 
 
-    public static void showAlertDialog(final Context mContext, String message, String title) {
+    public static void showAlertDialog(final Context mContext, String message) {
         AlertDialog.Builder createBuilder = new AlertDialog.Builder(mContext);
-        createBuilder.setCancelable(true).setTitle(title).setMessage(message).setPositiveButton(mContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
+        createBuilder.setCancelable(true).setMessage(message).setPositiveButton(mContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        createBuilder.show();
+    }
+
+    public static void PassAlertPAct(final Context mContext, String message) {
+        AlertDialog.Builder createBuilder = new AlertDialog.Builder(mContext);
+        createBuilder.setCancelable(true).setMessage(message).setPositiveButton(mContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((ChooseCategory) mContext).finish();
                 dialog.cancel();
             }
         });
