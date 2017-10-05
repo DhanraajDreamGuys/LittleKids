@@ -11,7 +11,7 @@ public class Categories extends RealmObject {
 
     private String id;
     private RealmList<Category> category;
-    private String lastupdatetime;
+    private String last_updated_time;
 
 
     public String getId() {
@@ -31,10 +31,10 @@ public class Categories extends RealmObject {
     }
 
     public String getLastupdatetime() {
-        return lastupdatetime;
+        return last_updated_time;
     }
 
     public void setLastupdatetime(String lastupdatetime) {
-        this.lastupdatetime = lastupdatetime;
+        this.last_updated_time = lastupdatetime;
     }
 }

@@ -9,9 +9,6 @@ import android.transition.Slide;
 import android.util.Log;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.in.dreamguys.littlekids.Adapter.CategoryAdapter;
 import co.in.dreamguys.littlekids.Helper.Config;
 import co.in.dreamguys.littlekids.Model.CategoryResponse;
@@ -32,13 +29,11 @@ import rx.schedulers.Schedulers;
 
 public class ChooseCategory extends LittleKidsActivity {
 
-    String langid, last_updated_time = "";
+    String langid;
     private Realm realm;
     private static final String TAG = ChooseCategory.class.getSimpleName();
     CategoryAdapter aCategoryAdapter;
     ListView categoryWidgets;
-    List<Category> insertCategory = new ArrayList<Category>();
-    Category POJOCategory;
     Categories fetchCatdata;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -72,6 +67,7 @@ public class ChooseCategory extends LittleKidsActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setupWindowAnimations() {
+
         Fade fade = new Fade();
         fade.setDuration(1000);
         getWindow().setEnterTransition(fade);
@@ -80,9 +76,6 @@ public class ChooseCategory extends LittleKidsActivity {
         slide.setDuration(1000);
         getWindow().setReturnTransition(slide);
 
-       /* Explode mExplode = new Explode();
-        mExplode.setDuration(1000);
-        getWindow().setReenterTransition(mExplode);*/
     }
 
     private void loadUI() {
@@ -106,7 +99,7 @@ public class ChooseCategory extends LittleKidsActivity {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "In onCompleted()");
-                        fetchCatdata = realm.where(Categories.class).equalTo("id", langid).findFirst();
+                        fetchCatdata = realm.where(Categories.class).equalTo(Config.ID, langid).findFirst();
                         if (fetchCatdata != null) {
                             if (fetchCatdata.getCategory().size() > 0) {
                                 showCategoryListData(fetchCatdata.getCategory());
@@ -143,7 +136,7 @@ public class ChooseCategory extends LittleKidsActivity {
         } else if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("2")) {
             Log.i(TAG, categoryResponse.getResponse().getResponse_message());
         } else if (categoryResponse.getResponse().getResponse_code().equalsIgnoreCase("1")) {
-            final Categories updateCat = realm.where(Categories.class).equalTo("lastupdatetime", categoryResponse.getLast_updated_time()).findFirst();
+            final Categories updateCat = realm.where(Categories.class).equalTo(Config.LAST_UPDATED_TIME, categoryResponse.getLast_updated_time()).findFirst();
             if (updateCat != null) {
                 updateCatgorydata(updateCat, categoryResponse);
             } else {

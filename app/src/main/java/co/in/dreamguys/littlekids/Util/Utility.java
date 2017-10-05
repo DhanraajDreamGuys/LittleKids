@@ -1,5 +1,6 @@
 package co.in.dreamguys.littlekids.Util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
@@ -12,7 +13,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import co.in.dreamguys.littlekids.ChooseCategory;
 import co.in.dreamguys.littlekids.R;
 
 /**
@@ -68,12 +68,12 @@ public class Utility {
         createBuilder.show();
     }
 
-    public static void PassAlertPAct(final Context mContext, String message) {
+    public static void PassAlertPAct(final Activity mContext, String message) {
         AlertDialog.Builder createBuilder = new AlertDialog.Builder(mContext);
         createBuilder.setCancelable(true).setMessage(message).setPositiveButton(mContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((ChooseCategory) mContext).finish();
+                mContext.finish();
                 dialog.cancel();
             }
         });

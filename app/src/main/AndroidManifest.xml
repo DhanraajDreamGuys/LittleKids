@@ -37,6 +37,10 @@
             android:name=".ShowCategoryItems"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".LearningAct"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".test.TestActivity">
 
         </activity>

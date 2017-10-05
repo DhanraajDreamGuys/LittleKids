@@ -17,4 +17,5 @@ public abstract class LittleKidsActivity extends AppCompatActivity {
         View rootView = (View) findViewById(android.R.id.content);
         rootView.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_morning_bg));
     }
+
 }

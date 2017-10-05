@@ -1,5 +1,6 @@
 package co.in.dreamguys.littlekids.Network;
 
+import co.in.dreamguys.littlekids.Model.CategoryItemsresponse;
 import co.in.dreamguys.littlekids.Model.CategoryResponse;
 import co.in.dreamguys.littlekids.Model.LanguageResponse;
 import retrofit2.http.Field;
@@ -18,6 +19,10 @@ interface GitHubService {
     @FormUrlEncoded
     @POST("categories")
     Observable<CategoryResponse> getCategory(@Field("lang_id") String lang_id, @Field("last_updated_time") String last_updated);
+
+    @FormUrlEncoded
+    @POST("categoriesItems")
+    Observable<CategoryItemsresponse> getCategoryItems(@Field("category_id") String category_id, @Field("last_updated_time") String last_updated);
 
 
 }

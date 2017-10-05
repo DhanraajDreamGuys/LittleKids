@@ -4,4 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <GridView
+        android:id="@+id/lv_show_category_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="@dimen/_1sdp"
+        android:horizontalSpacing="@dimen/_1sdp"
+        android:numColumns="3"
+        android:scrollbars="none"
+        android:verticalSpacing="@dimen/_1sdp" />
+
 </LinearLayout>

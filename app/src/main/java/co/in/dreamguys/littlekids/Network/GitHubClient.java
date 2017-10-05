@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import co.in.dreamguys.littlekids.Helper.Config;
+import co.in.dreamguys.littlekids.Model.CategoryItemsresponse;
 import co.in.dreamguys.littlekids.Model.CategoryResponse;
 import co.in.dreamguys.littlekids.Model.LanguageResponse;
 import okhttp3.OkHttpClient;
@@ -56,6 +57,10 @@ public class GitHubClient {
 
     public Observable<CategoryResponse> getCategoryData(@NonNull String lang_id, @NonNull String last_updated_time) {
         return gitHubService.getCategory(lang_id, last_updated_time);
+    }
+
+    public Observable<CategoryItemsresponse> getCategoryItemsData(@NonNull String cat_id, @NonNull String last_updated_time) {
+        return gitHubService.getCategoryItems(cat_id, last_updated_time);
     }
 
 }
