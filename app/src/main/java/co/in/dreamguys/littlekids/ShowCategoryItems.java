@@ -1,9 +1,12 @@
 package co.in.dreamguys.littlekids;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import co.in.dreamguys.littlekids.Adapter.CategoryItemsAdapter;
 import co.in.dreamguys.littlekids.Helper.Config;
@@ -31,6 +34,9 @@ public class ShowCategoryItems extends LittleKidsActivity {
     String langId = "", catID = "";
     RealmResults<CategoryItems> fetchCategoryItems;
     CategoryItemsAdapter aCategoryItemsAdapter;
+    MediaPlayer mp;
+    private Handler handler, handler1;
+    private ImageView inputSun1, inputCloud;
 
 
     @Override
@@ -45,11 +51,15 @@ public class ShowCategoryItems extends LittleKidsActivity {
 
         fetchCategoryItems = realm.where(CategoryItems.class).equalTo(Config.DB_CAT_ID, catID).findAll();
 
-
         if (fetchCategoryItems.size() > 0 && !Utility.isNetworkAvailable(ShowCategoryItems.this)) {
             showCategoryListData(fetchCategoryItems);
         } else if (Utility.isNetworkAvailable(ShowCategoryItems.this)) {
-            getCategoryItems(catID, fetchCategoryItems.get(0).getLast_updated_time());
+            if (fetchCategoryItems.size() > 0) {
+                getCategoryItems(catID, fetchCategoryItems.get(0).getLast_updated_time());
+            } else {
+                getCategoryItems(catID, Config.Lang_Last_Updated_time);
+            }
+
         } else {
             Utility.PassAlertPAct(ShowCategoryItems.this, getString(R.string.no_data_found));
         }
@@ -68,6 +78,13 @@ public class ShowCategoryItems extends LittleKidsActivity {
 
     private void loadUI() {
         gridShowCategoryItem = (GridView) findViewById(R.id.lv_show_category_items);
+        inputSun1 = (ImageView) findViewById(R.id.AB_IV_sun1);
+        inputCloud = (ImageView) findViewById(R.id.AB_IV_cloud);
+        handler = new Handler();
+        handler1 = new Handler();
+        Utility.handler(ShowCategoryItems.this, inputSun1, 13000, handler);
+        Utility.MoveImage(ShowCategoryItems.this, inputCloud, 5000, handler);
+        Utility.MoveImage1(ShowCategoryItems.this, inputSun1, 14000, handler1);
     }
 
     private void getCategoryItems(final String catID, final String last_update_time) {
@@ -144,12 +161,12 @@ public class ShowCategoryItems extends LittleKidsActivity {
                     for (int i = 0; i < primary.getSections().size(); i++) {
                         CategoryItemsresponse.Section section = primary.getSections().get(i);
                         updateCatItems.setSection_title(section.getSection_title());
-                        updateCatItems.setSection_title(section.getSection_title());
+                      /*  updateCatItems.setSection_title(section.getSection_title());
                         updateCatItems.getSectionList().get(i).setSection_name(section.getSection_name());
                         updateCatItems.getSectionList().get(i).setSection_audio_url(section.getSection_audio_url());
                         updateCatItems.getSectionList().get(i).setSection_img_url(section.getSection_img_url());
 
-                        updateCatItems.getSectionList().add(updateCatItems.getSectionList().get(i));
+                        updateCatItems.getSectionList().add(updateCatItems.getSectionList().get(i));*/
                         for (int subsection = 0; subsection < section.getSubSections().size(); subsection++) {
                             CategoryItemsresponse.SubSection subSection = section.getSubSections().get(subsection);
                             updateCatItems.setSection_title(section.getSection_title());
@@ -183,22 +200,23 @@ public class ShowCategoryItems extends LittleKidsActivity {
                     //add sub sections data here...
                     for (CategoryItemsresponse.Section section : primary.getSections()) {
                         addCategoriesItems.setSection_title(section.getSection_title());
-
+/*
                         SectionLists addSubCategoriesItems = realm.createObject(SectionLists.class);
                         addSubCategoriesItems.setSection_title(section.getSection_title());
                         addSubCategoriesItems.setSection_name(section.getSection_name());
                         addSubCategoriesItems.setSection_audio_url(section.getSection_audio_url());
                         addSubCategoriesItems.setSection_img_url(section.getSection_img_url());
 
-                        addCategoriesItems.getSectionList().add(addSubCategoriesItems);
+                        addCategoriesItems.getSectionList().add(addSubCategoriesItems);*/
 
                         for (CategoryItemsresponse.SubSection subSection : section.getSubSections()) {
-                            addSubCategoriesItems.setSection_title(section.getSection_title());
-                            addSubCategoriesItems.setSection_name(subSection.getSub_section_name());
-                            addSubCategoriesItems.setSection_audio_url(subSection.getSub_section_img_audio());
-                            addSubCategoriesItems.setSection_img_url(subSection.getSub_section_img_url());
+                            SectionLists addSubCategoriesItems1 = realm.createObject(SectionLists.class);
+                            addSubCategoriesItems1.setSection_title(section.getSection_title());
+                            addSubCategoriesItems1.setSection_name(subSection.getSub_section_name());
+                            addSubCategoriesItems1.setSection_audio_url(subSection.getSub_section_img_audio());
+                            addSubCategoriesItems1.setSection_img_url(subSection.getSub_section_img_url());
 
-                            addCategoriesItems.getSectionList().add(addSubCategoriesItems);
+                            addCategoriesItems.getSectionList().add(addSubCategoriesItems1);
                         }
 
 
@@ -211,6 +229,30 @@ public class ShowCategoryItems extends LittleKidsActivity {
         });
 
 
+    }
+
+    public void getMediaPlayInstance(MediaPlayer mp) {
+        this.mp = mp;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mp != null) {
+            if (mp.isPlaying()) {
+                mp.stop();
+            }
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (mp != null) {
+            mp.stop();
+        }
+        overridePendingTransition(R.anim.right_out, R.anim.left_in);
     }
 
 }

@@ -30,6 +30,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".test.TestBackground"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".ChooseCategory"
             android:theme="@style/AppTheme.NoActionBar" />
 

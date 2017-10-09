@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
@@ -83,4 +86,42 @@ public class Utility {
     public static MediaPlayer createMediaplayerAudio(Context mContext) {
         return MediaPlayer.create(mContext, R.raw.switchs);
     }
+
+    //dots view test
+    public static double mapValueFromRangeToRange(double value, double fromLow, double fromHigh, double toLow, double toHigh) {
+        return toLow + ((value - fromLow) / (fromHigh - fromLow) * (toHigh - toLow));
+    }
+
+    public static double clamp(double value, double low, double high) {
+        return Math.min(Math.max(value, low), high);
+    }
+
+    public static void handler(final Context context, final ImageView imageView, int duration, Handler handler) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imageView.setVisibility(View.VISIBLE);
+                imageView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in));
+            }
+        }, duration);
+    }
+
+    public static void MoveImage(final Context context, final ImageView imageView, int duration, Handler handler) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imageView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.move_right));
+            }
+        }, duration);
+    }
+
+    public static void MoveImage1(final Context context, final ImageView imageView, int duration, Handler handler1) {
+        handler1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imageView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.move_up));
+            }
+        }, duration);
+    }
+
 }

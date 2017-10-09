@@ -1,5 +1,6 @@
 package co.in.dreamguys.littlekids.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -101,9 +102,11 @@ public class LanguageAdapter extends BaseAdapter {
     }
 
     private void showCategoryAct(String lang_id) {
+        final Activity activity = (Activity) mContext;
         Intent callCatAct = new Intent(mContext, ChooseCategory.class);
         callCatAct.putExtra(Config.LANG_ID, lang_id);
         mContext.startActivity(callCatAct);
+        activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 
 

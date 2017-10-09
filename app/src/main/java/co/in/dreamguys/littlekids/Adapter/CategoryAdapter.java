@@ -1,17 +1,23 @@
 package co.in.dreamguys.littlekids.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import co.in.dreamguys.littlekids.ChooseCategory;
 import co.in.dreamguys.littlekids.Helper.Config;
 import co.in.dreamguys.littlekids.R;
 import co.in.dreamguys.littlekids.RealmModel.Category;
 import co.in.dreamguys.littlekids.ShowCategoryItems;
+import co.in.dreamguys.littlekids.Util.Utility;
 import io.realm.RealmList;
 
 /**
@@ -22,6 +28,7 @@ public class CategoryAdapter extends BaseAdapter {
 
     private Context mContext;
     private RealmList<Category> mCategoryList;
+    Animation mBlink;
 
     public CategoryAdapter() {
     }
@@ -55,6 +62,8 @@ public class CategoryAdapter extends BaseAdapter {
         final View view = (convertView != null ? convertView : createView(parent));
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.setLanguageDatas(getItem(position));
+        mBlink = AnimationUtils.loadAnimation(mContext, R.anim.blink);
+        viewHolder.inputLanguage.startAnimation(mBlink);
         return view;
     }
 
@@ -79,9 +88,12 @@ public class CategoryAdapter extends BaseAdapter {
 
         void setLanguageDatas(final Category category) {
             inputLanguage.setText(category.getCategory_name());
+            final MediaPlayer mp = Utility.createMediaplayerAudio(mContext);
             inputLanguage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mp.start();
+                    ((ChooseCategory) mContext).getMediaPlayInstance(mp);
                     showCategoryItemsAct(category.getCategory_id(), category.getLang_id());
                 }
             });
@@ -89,9 +101,11 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     private void showCategoryItemsAct(String category_id, String lang_id) {
+        final Activity activity = (Activity) mContext;
         Intent callCatAct = new Intent(mContext, ShowCategoryItems.class);
         callCatAct.putExtra(Config.CAT_ID, category_id);
         callCatAct.putExtra(Config.LANG_ID, lang_id);
         mContext.startActivity(callCatAct);
+        activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 }

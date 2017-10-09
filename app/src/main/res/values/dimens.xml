@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="activity_horizontal_margin">@dimen/_16sdp</dimen>
+    <dimen name="activity_vertical_margin">@dimen/_16sdp</dimen>
+    <dimen name="pager_margin">@dimen/_5sdp</dimen>
+    <dimen name="viewPagerMargin">@dimen/_180sdp</dimen>
+
+</resources>

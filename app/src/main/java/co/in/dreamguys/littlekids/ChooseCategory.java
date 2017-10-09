@@ -1,12 +1,15 @@
 package co.in.dreamguys.littlekids;
 
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import co.in.dreamguys.littlekids.Adapter.CategoryAdapter;
@@ -30,11 +33,14 @@ import rx.schedulers.Schedulers;
 public class ChooseCategory extends LittleKidsActivity {
 
     String langid;
+    private ImageView inputSun1, inputCloud,inputCloud1;
     private Realm realm;
     private static final String TAG = ChooseCategory.class.getSimpleName();
     CategoryAdapter aCategoryAdapter;
     ListView categoryWidgets;
     Categories fetchCatdata;
+    MediaPlayer mp;
+    Handler handler, handler1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -46,6 +52,7 @@ public class ChooseCategory extends LittleKidsActivity {
         langid = getIntent().getStringExtra(Config.LANG_ID);
 
         loadUI();
+
 
         fetchCatdata = realm.where(Categories.class).equalTo("id", langid).findFirst();
 
@@ -80,6 +87,15 @@ public class ChooseCategory extends LittleKidsActivity {
 
     private void loadUI() {
         categoryWidgets = (ListView) findViewById(R.id.CC_LV_category);
+        inputSun1 = (ImageView) findViewById(R.id.AB_IV_sun1);
+        inputCloud = (ImageView) findViewById(R.id.AB_IV_cloud);
+        inputCloud1 = (ImageView) findViewById(R.id.AB_IV_cloud1);
+        handler = new Handler();
+        handler1 = new Handler();
+        Utility.handler(ChooseCategory.this, inputSun1, 13000, handler);
+        Utility.MoveImage(ChooseCategory.this, inputCloud, 5000, handler);
+        Utility.MoveImage1(ChooseCategory.this, inputSun1, 14000, handler1);
+        Utility.MoveImage(ChooseCategory.this, inputCloud1, 10000, handler);
     }
 
     private void showCategoryListData(RealmList<Category> mCategoryResponse) {
@@ -211,5 +227,29 @@ public class ChooseCategory extends LittleKidsActivity {
         } else {
             Log.i(TAG, categoryResponse.getResponse().getResponse_message());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (mp != null) {
+            mp.stop();
+        }
+        overridePendingTransition(R.anim.right_out, R.anim.left_in);
+    }
+
+    public void getMediaPlayInstance(MediaPlayer mp) {
+        this.mp = mp;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mp != null) {
+            if (mp.isPlaying()) {
+                mp.stop();
+            }
+        }
+
     }
 }
